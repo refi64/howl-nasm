@@ -11,7 +11,6 @@ x86db.forEach(function (name, instr) {
     for (var i=0; i<instr.operands.length; i++)
         sigs.push(instr.operands[i].data);
     instructions[name] = (instructions[name] || []).concat(sigs);
-
 });
 
 var tab = ['{'];
@@ -29,7 +28,7 @@ for (var name in instructions) {
     orig_sigs.sort();
 
     for (var i=0; i<orig_sigs.length; i++)
-        sigs.push('# ' + name + ' ' + orig_sigs[i]);
+        sigs.push(name + ' ' + orig_sigs[i]);
 
     doc = '{description:"' + sigs.join('\\n') + '",signature:"' + name + '"}';
     api.push('  ' + name + ':' + doc);
