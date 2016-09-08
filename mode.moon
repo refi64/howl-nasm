@@ -1,4 +1,5 @@
 {
+  api: bundle_load 'api'
   lexer: bundle_load 'lexer'
 
   comment_syntax: ';'
