@@ -1,5 +1,7 @@
 bundle_load = bundle_load
 print = print
+pairs = pairs
+append = table.insert
 
 howl.util.lpeg_lexer ->
   c = capture
@@ -17,8 +19,9 @@ howl.util.lpeg_lexer ->
   ul = (c) -> P(c)+P(c\upper!)
   ult = (w) -> [ul c for c in w\gmatch '.']
   uls = (w) -> any ult w
+  ulq = (w) -> sequence ult w
   case_word = (words) ->
-    any [sequence ult w for w in *words]
+    any [ulq w for w in *words]
 
   keyword = c 'keyword', case_word {
     'abs', 'alignb', 'align', 'at', 'byte', 'default', 'db', 'dd', 'do', 'dq',
@@ -31,7 +34,7 @@ howl.util.lpeg_lexer ->
   instrs = bundle_load 'instructions'
   instr = c 'keyword', P (file, pos) ->
     word = file\sub(pos)\match'^%a+'
-    if instrs[word]
+    if word and instrs[word\lower!]
       pos + #word
     else
       false
@@ -70,6 +73,36 @@ howl.util.lpeg_lexer ->
     '__UTC_TIME_NUM__','__UTC_TIME__'
   }
 
+  gen_regs = ->
+    gen =
+      ax: true
+      cx: true
+      dx: true
+      bx: true
+      sp: false
+      bp: false
+      si: false
+      di: false
+
+    res = {}
+    ins = (p) -> append res, P(p)
+
+    for regbase, hl in pairs gen
+      ins S'erER'^-1 * ulq regbase
+      ins ul(regbase\sub 1, 1) * S'hlHL' if hl
+
+    ins S'sScCdDeEfFgG' * S'sS'
+    for i=0,15
+      ins S'rR' * P"#{i}" * S'dDwWlL'^-1
+
+    for i=0,7
+      ins S'xX'^-1 * S'mM' * S'mM' * P"#{i}"
+      ins S'sS' * S'tT' * P"#{i}"
+
+    any res
+
+  reg = c 'special', gen_regs!
+
   make_num_set = (chr0, chr1, letters, bare_prefix, dec) ->
     chr = if chr1
       chr0 + chr1
@@ -107,6 +140,7 @@ howl.util.lpeg_lexer ->
     keyword
     instr
     special
+    reg
     number
     macro
     operator
