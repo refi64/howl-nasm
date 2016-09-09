@@ -50,11 +50,12 @@ howl.util.lpeg_lexer ->
     R'09'
     P'%' * id
     word {
-      'arg', 'assign', 'define', 'defstr', 'deftok', 'depend', 'endmacro',
-      'error', 'fatal', 'ifctx', 'ifdef', 'ifempty', 'ifenv', 'ifidni', 'ifidn',
-      'ifmacro', 'iftoken', 'if','include', 'line', 'local', 'macro',
-      'pathsearch', 'pop', 'push', 'stacksize', 'strcat', 'strlen', 'substr',
-      'repl', 'rep', 'rotate', 'xdefine', 'undef', 'unmacro', 'use', 'warning'
+      'arg', 'assign', 'define', 'defstr', 'deftok', 'depend', 'endif',
+      'endmacro', 'endrep','error', 'fatal', 'ifctx', 'ifdef', 'ifempty',
+      'ifenv', 'ifidni', 'ifidn','ifmacro', 'iftoken', 'if','include', 'line',
+      'local', 'macro','pathsearch', 'pop', 'push', 'stacksize', 'strcat',
+      'strlen', 'substr','repl', 'rep', 'rotate', 'xdefine', 'undef', 'unmacro',
+      'use', 'warning'
     }
   }
 
