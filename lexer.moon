@@ -24,15 +24,17 @@ howl.util.lpeg_lexer ->
     any [ulq w for w in *words]
 
   keyword = c 'keyword', case_word {
-    'abs', 'alignb', 'align', 'at', 'byte', 'default', 'db', 'dd', 'do', 'dq',
-    'dt', 'dword', 'dw', 'endstruc', 'equ', 'iend', 'incbin', 'istruc',
-    'nosplit', 'opsize', 'oword', 'qword', 'rel', 'resb', 'resd', 'reso',
-    'resq', 'rest', 'resw', 'resy', 'resz', 'sectalign', 'struc', 'strict',
-    'times', 'seq', 'tword', 'word', 'wrt', 'yword', 'zword'
+    'absolute', 'abs', 'alignb', 'align', 'at', 'bits', 'bnd', 'byte', 'common',
+    'cpu', 'default', 'db', 'dd', 'do', 'dq', 'dt', 'dword', 'dw', 'endstruc',
+    'equ', 'extern', 'float', 'global', 'iend', 'incbin', 'istruc', 'nobnd',
+    'nosplit', 'opsize', 'oword', 'qword', 'rel', 'resb', 'resd', 'reso', 'resq',
+    'rest', 'resw', 'resy', 'resz', 'sectalign', 'section', 'segment', 'struc',
+    'strict', 'times', 'seq', 'tword', 'use16', 'use32', 'word', 'wrt', 'yword',
+    'zword'
   }
 
   instrs = bundle_load 'instructions'
-  instr = c 'keyword', P (file, pos) ->
+  instr = c 'function', P (file, pos) ->
     word = file\sub(pos)\match'^%a+'
     if word and instrs[word\lower!]
       pos + #word
@@ -66,11 +68,12 @@ howl.util.lpeg_lexer ->
   }
 
   special = c 'special', (P'__USE_' * id * '__') + word {
-    '__BITS__', '__DATE_NUM__', '__DATE__', '__FILE__', '__Infinity__',
-    '__LINE__', '__NASM_VERSION_ID__', '__NASM_VER__', '__NaN__',
-    '__POSIX_TIME__', '__PASS__', '__OUTPUT_FORMAT__', '__QNaN__', '__SNaN__',
+    '__BITS__', '__DATE_NUM__', '__DATE__', '__FILE__', '__FLOAT_DAZ__',
+    '__FLOAT_ROUND__', '__FLOAT__', '__Infinity__', '__LINE__',
+    '__NASM_VERSION_ID__', '__NASM_VER__', '__NaN__', '__POSIX_TIME__',
+    '__PASS__', '__OUTPUT_FORMAT__', '__QNaN__', '__SECT__', '__SNaN__',
     '__TIME_NUM__', '__TIME__', '__UTC_DATE_NUM__', '__UTC_DATE__',
-    '__UTC_TIME_NUM__','__UTC_TIME__'
+    '__UTC_TIME_NUM__', '__UTC_TIME__'
   }
 
   gen_regs = ->
