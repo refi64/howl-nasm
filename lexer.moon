@@ -141,8 +141,30 @@ howl.util.lpeg_lexer ->
 
   string = c 'string', string_contents
 
+  struc = sequence {
+    c 'keyword', 'struc'
+    ws
+    c 'type_def', id
+  }
+
+  label = any {
+    sequence {
+      c 'keyword', case_word { 'global', 'extern' }
+      ws
+      c 'fdecl', id
+    }
+    sequence {
+      c 'fdecl', id
+      ws
+      c 'operator', ':'
+    }
+  }
+
   any {
     comment
+    string
+    struc
+    label
     keyword
     instr
     special
