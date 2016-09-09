@@ -46,13 +46,15 @@ howl.util.lpeg_lexer ->
     P'!' * (id + string_contents)^-1
     P'??'
     P'00'
-    S'+?0'
+    S'+?'
+    R'09'
+    P'%' * id
     word {
-      'arg', 'assign', 'define', 'defstr', 'deftok', 'depend', 'error', 'fatal',
-      'ifctx', 'ifdef', 'ifempty', 'ifenv', 'ifidni', 'ifidn', 'ifmacro',
-      'iftoken', 'if','include', 'line', 'local', 'macro', 'pathsearch', 'pop',
-      'push', 'stacksize', 'strcat', 'strlen', 'substr', 'repl', 'rep', 'rotate',
-      'xdefine', 'undef', 'unmacro', 'use', 'warning'
+      'arg', 'assign', 'define', 'defstr', 'deftok', 'depend', 'endmacro',
+      'error', 'fatal', 'ifctx', 'ifdef', 'ifempty', 'ifenv', 'ifidni', 'ifidn',
+      'ifmacro', 'iftoken', 'if','include', 'line', 'local', 'macro',
+      'pathsearch', 'pop', 'push', 'stacksize', 'strcat', 'strlen', 'substr',
+      'repl', 'rep', 'rotate', 'xdefine', 'undef', 'unmacro', 'use', 'warning'
     }
   }
 
