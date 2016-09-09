@@ -21,7 +21,7 @@ howl.util.lpeg_lexer ->
   uls = (w) -> any ult w
   ulq = (w) -> sequence ult w
   case_word = (words) ->
-    any [ulq w for w in *words]
+    any([ulq w for w in *words]) * -#id
 
   keyword = c 'keyword', case_word {
     'absolute', 'abs', 'alignb', 'align', 'at', 'bits', 'bnd', 'byte', 'common',
@@ -98,14 +98,14 @@ howl.util.lpeg_lexer ->
       ins ul(regbase\sub 1, 1) * S'hlHL' if hl
 
     ins S'sScCdDeEfFgG' * S'sS'
-    for i=0,15
-      ins S'rR' * P"#{i}" * S'dDwWlL'^-1
+    for i=15,0,-1
+      ins S'rR' * P"#{i}" * S'bBdDwWlL'^-1
 
     for i=0,7
       ins S'xX'^-1 * S'mM' * S'mM' * P"#{i}"
       ins S'sS' * S'tT' * P"#{i}"
 
-    any res
+    any(res) * -#id
 
   reg = c 'special', gen_regs!
 
